@@ -2,18 +2,14 @@ package com.mobile.app.aacexample.ui.main
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import com.mobile.app.aacexample.R
 import com.mobile.app.aacexample.data.local.AppDatabase
 import com.mobile.app.aacexample.util.consume
 import com.mobile.app.aacexample.util.inTransaction
-import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
-class MainActivity : DaggerAppCompatActivity() {
-
-    @Inject
-    lateinit var frag : MainFragment
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +17,8 @@ class MainActivity : DaggerAppCompatActivity() {
 
         if(savedInstanceState == null){
             AppDatabase.getInstance(this)
-            consume { replaceFragment(frag) }
+            consume { replaceFragment(MainFragment.newInstance()) }
         }
-        val a : String? = medianOf("")
-        requireNotNull(a)
-        a.length
     }
 
     private fun <F> replaceFragment(fragment : F) where F : Fragment {
@@ -34,7 +27,4 @@ class MainActivity : DaggerAppCompatActivity() {
         }
     }
 
-}
-val medianOf = a@{ aa : String ->
-    return@a "a"
 }

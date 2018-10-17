@@ -7,8 +7,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class MainRespository @Inject constructor(){
-//    fun getMains() = mainDao.getMains()
+class MainRespository constructor(private val mainDao: MainDao){
+    fun getMains() = mainDao.getMains()
 //
 //    fun getMain(idx : Int) = mainDao.getMain(idx)
 //
@@ -27,11 +27,11 @@ class MainRespository @Inject constructor(){
 //            .subscribeOn(Schedulers.io())
 //            .doOnSuccess { mainDao.updateMain(it) }
 //
-//    companion object {
-//        @Volatile private var instance : MainRespository? = null
-//
-//        fun getInstance(mainDao : MainDao) = instance ?: synchronized(this){
-//            instance ?: MainRespository(mainDao).also { instance = it }
-//        }
-//    }
+    companion object {
+        @Volatile private var instance : MainRespository? = null
+
+        fun getInstance(mainDao : MainDao) = instance ?: synchronized(this){
+            instance ?: MainRespository(mainDao).also { instance = it }
+        }
+    }
 }
