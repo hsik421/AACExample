@@ -1,4 +1,4 @@
-package com.mobile.app.aacexample.di
+package com.mobile.app.aacexample.di.scope
 
 import android.arch.lifecycle.ViewModel
 import dagger.MapKey

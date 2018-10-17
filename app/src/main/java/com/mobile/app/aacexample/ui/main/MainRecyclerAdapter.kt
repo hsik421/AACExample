@@ -13,8 +13,7 @@ import com.mobile.app.aacexample.R
 import com.mobile.app.aacexample.data.local.Main
 import com.mobile.app.aacexample.databinding.ItemMainBinding
 
-class MainRecyclerAdapter(private val lifecycleOwner: LifecycleOwner,
-                          private val mainViewModel : MainViewModel) : ListAdapter<Any, MainRecyclerAdapter.MainViewHolder>(Diff){
+class MainRecyclerAdapter(private val lifecycleOwner: LifecycleOwner) : ListAdapter<Any, MainRecyclerAdapter.MainViewHolder>(Diff){
 
     private val differ = AsyncListDiffer<Any>(this, Diff)
     var datas : List<Main> = emptyList()
@@ -49,9 +48,10 @@ class MainRecyclerAdapter(private val lifecycleOwner: LifecycleOwner,
         }
     }
 
-    override fun onBindViewHolder(holder: MainViewHolder, p1: Int) {
+    override fun onBindViewHolder(holder: MainViewHolder, pos: Int) {
         when(holder){
             is MainViewHolder.ContentViewHolder -> holder.binding.apply {
+                main = getItem(pos) as Main
                 setLifecycleOwner(lifecycleOwner)
             }
         }

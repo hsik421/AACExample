@@ -1,10 +1,8 @@
 package com.mobile.app.aacexample.data.local
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
+import android.arch.persistence.room.OnConflictStrategy.REPLACE
 
 @Dao
 interface MainDao {
@@ -19,4 +17,8 @@ interface MainDao {
 
     @Delete
     fun deleteMain(main : Main)
+
+//    @Query("UPDATE aac_table SET title=:title WHERE idx = :idx")
+    @Update(onConflict = REPLACE)
+    fun updateMain(main : Main)
 }

@@ -1,12 +1,16 @@
 package com.mobile.app.aacexample.ui.main
 
 import android.arch.lifecycle.ViewModel
-import com.mobile.app.aacexample.di.FragmentScoped
-import com.mobile.app.aacexample.di.ViewModelKey
+import com.mobile.app.aacexample.data.MainRespository
+import com.mobile.app.aacexample.data.local.MainDao
+import com.mobile.app.aacexample.di.scope.FragmentScoped
+import com.mobile.app.aacexample.di.scope.ViewModelKey
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
+import javax.inject.Singleton
 
 @Module
 internal abstract class MainModule {
@@ -18,4 +22,5 @@ internal abstract class MainModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     abstract fun bindMainFragmentViewModel(viewModel : MainViewModel) : ViewModel
+
 }

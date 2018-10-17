@@ -1,6 +1,8 @@
 package com.mobile.app.aacexample.di
 
 import android.arch.lifecycle.ViewModel
+import com.mobile.app.aacexample.di.scope.DialogScoped
+import com.mobile.app.aacexample.di.scope.ViewModelKey
 import com.mobile.app.aacexample.ui.insert.InsertDialog
 import com.mobile.app.aacexample.ui.insert.InsertViewModel
 import dagger.Binds
