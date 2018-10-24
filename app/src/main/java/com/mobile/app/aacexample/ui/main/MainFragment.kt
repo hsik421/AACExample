@@ -1,13 +1,16 @@
 package com.mobile.app.aacexample.ui.main
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.mobile.app.aacexample.databinding.FragmentMainBinding
 import com.mobile.app.aacexample.ui.insert.InsertDialog
@@ -21,7 +24,7 @@ class MainFragment : Fragment() {
 
     private lateinit var  mainViewModel : MainViewModel
 
-    private val mainAdapter by lazy { MainRecyclerAdapter(mainViewModel,this@MainFragment) }
+    private val mainAdapter by lazy { MainRecyclerAdapter(mainViewModel) }
 
     private val dispose : CompositeDisposable = CompositeDisposable()
 
@@ -42,13 +45,24 @@ class MainFragment : Fragment() {
         recycler?.apply {
             adapter = mainAdapter
             layoutManager = LinearLayoutManager(context)
+            addItemDecoration(DividerItemDecoration(context,LinearLayoutManager.VERTICAL))
         }
         fab?.clicks()?.subscribe {
-//            mainAdapter.datas = listOf(Main(1, "1"))
-//            dialog.show(fragmentManager,null)
-            InsertDialog.newInstance().apply {  }.show(fragmentManager,null)
+            InsertDialog.newInstance().apply {
+                dialogListener = object : InsertDialog.DialogListener{
+                    override fun onPositive(text: String) {
+                        mainViewModel.insert(text)
+                    }
+                }
+            }.show(fragmentManager,null)
         }.let { dispose.add(it) }
 
+        show?.clicks()?.subscribe {
+            fab.animate().translationY(50f).setDuration(1000).start()
+        }.let { dispose.add(it) }
+        hide?.clicks()?.subscribe {
+            fab.animate().translationY(0f).setDuration(1000).start()
+        }.let { dispose.add(it) }
     }
 
     override fun onDestroy() {
@@ -57,6 +71,7 @@ class MainFragment : Fragment() {
     }
     private fun subscribeUi(){
         mainViewModel.mainList.observe(viewLifecycleOwner, Observer {
+            Log.i("hsik","mainList = $it")
             binding.hasMains = (it != null && it.isNotEmpty())
             if(it != null && it.isNotEmpty()){
                 mainAdapter.submitList(it)

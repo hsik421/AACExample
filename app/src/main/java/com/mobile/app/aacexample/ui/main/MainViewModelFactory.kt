@@ -1,7 +1,7 @@
 package com.mobile.app.aacexample.ui.main
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.mobile.app.aacexample.data.MainRespository
 
 class MainViewModelFactory(private val repository : MainRespository) : ViewModelProvider.NewInstanceFactory() {

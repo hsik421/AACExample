@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditText
+        android:id="@+id/edit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
     <Button
         android:id="@+id/positiveBtn"
         android:layout_width="100dp"
@@ -10,6 +16,7 @@
         android:minWidth="120dp"
         android:text="POSITIVE"
         app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintTop_toBottomOf="@id/edit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/negativeBtn"/>
     <Button
@@ -18,6 +25,7 @@
         android:layout_height="wrap_content"
         android:minWidth="120dp"
         android:text="NEGATIVE"
+        app:layout_constraintTop_toBottomOf="@id/edit"
         app:layout_constraintStart_toEndOf="@id/positiveBtn"
         app:layout_constraintEnd_toEndOf="parent"/>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,82 +1,41 @@
 package com.mobile.app.aacexample.ui.main
 
-import android.arch.lifecycle.LifecycleOwner
-import android.support.v7.recyclerview.extensions.AsyncListDiffer
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.mobile.app.aacexample.R
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.rxbinding2.view.clicks
 import com.mobile.app.aacexample.data.local.Main
 import com.mobile.app.aacexample.databinding.ItemMainBinding
 
-class MainRecyclerAdapter(private val mainViewModel : MainViewModel,
-                          private val lifecycleOwner: LifecycleOwner) : ListAdapter<Any, MainRecyclerAdapter.MainViewHolder>(Diff){
-
-    private val differ = AsyncListDiffer<Any>(this, Diff)
-    var datas : List<Main> = emptyList()
-        set(value) {
-            Log.i("hsik","value = $value")
-            field = value
-            differ.submitList(buildMergedList(value))
-        }
+class MainRecyclerAdapter(private val mainViewModel : MainViewModel) : ListAdapter<Main, MainRecyclerAdapter.MainViewHolder.ContentViewHolder>(Diff){
 
     companion object {
-        val Diff = object : DiffUtil.ItemCallback<Any>(){
-            override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean{
-                Log.i("hsik","oldItem = $oldItem")
-                Log.i("hsik","newItem = $newItem")
-                return when{
-                    oldItem is Main && newItem is Main -> oldItem.idx == newItem.idx
-                    else-> false
-                }
+        val Diff = object : DiffUtil.ItemCallback<Main>(){
+            override fun areItemsTheSame(oldItem: Main, newItem: Main): Boolean{
+                return oldItem.idx == newItem.idx
             }
 
-            override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean = when{
-                oldItem is Main && newItem is Main -> oldItem == newItem
-                else -> true
-            }
+            override fun areContentsTheSame(oldItem: Main, newItem: Main): Boolean = oldItem == newItem
         }
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder.ContentViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return when(viewType){
-            R.layout.item_main -> MainViewHolder.ContentViewHolder(ItemMainBinding.inflate(inflater,parent,false))
-            else-> throw IllegalStateException("Unknown viewType $viewType")
-        }
+        return MainViewHolder.ContentViewHolder(ItemMainBinding.inflate(inflater,parent,false))
     }
 
-    override fun onBindViewHolder(holder: MainViewHolder, pos: Int) {
-        when(holder){
-            is MainViewHolder.ContentViewHolder -> holder.binding.apply {
-                val item = getItem(pos)
-                Log.i("hsik","item = $item")
-                setLifecycleOwner(lifecycleOwner)
-                executePendingBindings()
+    override fun onBindViewHolder(holder: MainViewHolder.ContentViewHolder, pos: Int) {
+        holder.binding.apply {
+            root.clicks().subscribe {
+                mainViewModel.onDeleteClick(pos)
             }
+            main = getItem(pos)
+            executePendingBindings()
         }
     }
-
-    override fun getItemCount(): Int = differ.currentList.size
-
-    override fun getItemViewType(position: Int): Int =
-            when(differ.currentList[position]){
-                is Main -> R.layout.item_main
-                else -> throw IllegalStateException("differ.currentList[position] = ${differ.currentList[position]}")
-            }
-    private fun buildMergedList(datas : List<Main> = this.datas) : List<Any>{
-        val merged = mutableListOf<Any>()
-        if(datas.isNotEmpty()){
-            merged.addAll(datas)
-        }
-        return merged
-    }
-
-
-
 
     sealed class MainViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         class ContentViewHolder(val binding : ItemMainBinding) : MainViewHolder(binding.root)

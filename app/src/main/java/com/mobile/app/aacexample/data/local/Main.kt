@@ -1,8 +1,8 @@
 package com.mobile.app.aacexample.data.local
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "aac_table")
 data class Main(
@@ -10,5 +10,5 @@ data class Main(
         @ColumnInfo(name = "idx")
         val idx : Int,
         @ColumnInfo(name = "title")
-        val title : String
+        var title : String
 )

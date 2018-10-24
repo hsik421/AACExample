@@ -7,23 +7,36 @@
             name="hasMains"
             type="Boolean"/>
     </data>
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.main.MainFragment">
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#333333"
+            android:clipToPadding="false"
             app:isGone="@{!hasMains}"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="데이터가 없습니다."
+            android:text="Your data is empty"
             app:isGone="@{hasMains}"/>
-        <android.support.design.widget.FloatingActionButton
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/show"
+            android:text="show"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/hide"
+            app:layout_constraintTop_toBottomOf="@id/show"
+            android:text="hide"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,5 +47,5 @@
             android:src="@mipmap/ic_launcher"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
