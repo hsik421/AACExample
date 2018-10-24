@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.mobile.app.aacexample.databinding.FragmentMainBinding
 import com.mobile.app.aacexample.ui.insert.InsertDialog
@@ -56,13 +57,6 @@ class MainFragment : Fragment() {
                 }
             }.show(fragmentManager,null)
         }.let { dispose.add(it) }
-
-        show?.clicks()?.subscribe {
-            fab.animate().translationY(50f).setDuration(1000).start()
-        }.let { dispose.add(it) }
-        hide?.clicks()?.subscribe {
-            fab.animate().translationY(0f).setDuration(1000).start()
-        }.let { dispose.add(it) }
     }
 
     override fun onDestroy() {
@@ -71,11 +65,14 @@ class MainFragment : Fragment() {
     }
     private fun subscribeUi(){
         mainViewModel.mainList.observe(viewLifecycleOwner, Observer {
-            Log.i("hsik","mainList = $it")
             binding.hasMains = (it != null && it.isNotEmpty())
             if(it != null && it.isNotEmpty()){
                 mainAdapter.submitList(it)
             }
+        })
+        mainViewModel.snackbarMessage.observe(viewLifecycleOwner, Observer {
+            Log.i("hsik","snackbarMessage = $it")
+            Snackbar.make(coordinator?:return@Observer,it,Snackbar.LENGTH_SHORT).show()
         })
     }
     companion object {

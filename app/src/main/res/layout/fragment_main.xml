@@ -7,35 +7,30 @@
             name="hasMains"
             type="Boolean"/>
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
-
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.main.MainFragment">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#333333"
-            android:clipToPadding="false"
-            app:isGone="@{!hasMains}"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Your data is empty"
-            app:isGone="@{hasMains}"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/show"
-            android:text="show"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hide"
-            app:layout_constraintTop_toBottomOf="@id/show"
-            android:text="hide"/>
+            tools:context=".ui.main.MainFragment">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#333333"
+                android:clipToPadding="false"
+                app:isGone="@{!hasMains}"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Your data is empty"
+                app:isGone="@{hasMains}"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
@@ -46,6 +41,8 @@
             app:pressedTranslationZ="0dp"
             android:src="@mipmap/ic_launcher"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_gravity="bottom|end"
             app:layout_constraintEnd_toEndOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>
