@@ -1,14 +1,30 @@
 package com.mobile.app.aacexample.ui.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.mobile.app.aacexample.data.MainRespository
 import com.mobile.app.aacexample.data.local.Main
 import com.mobile.app.aacexample.util.SingleLiveEvent
+import javax.inject.Inject
 
-class MainViewModel internal constructor(private val mainRepository : MainRespository) : ViewModel(){
+class MainViewModel @Inject constructor(private val mainRepository : MainRespository) : ViewModel(){
 
-    val mainList : LiveData<List<Main>> = mainRepository.getMains()
+    private val _test = MediatorLiveData<List<Main>>()
+    val test : LiveData<List<Main>>
+        get() = _test
+
+
+    init {
+        _test.addSource(mainRepository.getMains()) { data->
+            Log.i("hsik","data = $data")
+            _test.value = data
+        }
+    }
+
+
+//    val mainList : LiveData<List<Main>> = mainRepository.getMains()
     val snackbarMessage = SingleLiveEvent<String>()
     fun insert(text : String){
         mainRepository.insertMain(Main(0,text))
@@ -25,7 +41,7 @@ class MainViewModel internal constructor(private val mainRepository : MainRespos
     }
 
     fun onDeleteClick(pos : Int){
-        mainRepository.removeMain(mainList.value?.get(pos)?:return)
+        mainRepository.removeMain(test.value?.get(pos)?:return)
                 .doOnSuccess {
                     snackbarMessage.value = "delete success"
                 }

@@ -1,5 +1,6 @@
 package com.mobile.app.aacexample
 
+import com.mobile.app.aacexample.ui.main.MainViewModel
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -13,5 +14,10 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
+    }
+
+    @Test
+    fun programmers1(){
+        
     }
 }

@@ -1,29 +1,34 @@
 package com.mobile.app.aacexample.ui.main
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
+import com.mobile.app.aacexample.MyApplication
 import com.mobile.app.aacexample.databinding.FragmentMainBinding
 import com.mobile.app.aacexample.ui.insert.InsertDialog
 import com.mobile.app.aacexample.util.InjectorUtils
+import com.mobile.app.aacexample.util.activityViewModelProvider
+import dagger.android.support.DaggerFragment
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_main.*
+import javax.inject.Inject
 
-class MainFragment : Fragment() {
+class MainFragment @Inject constructor(): DaggerFragment() {
 
     private lateinit var binding : FragmentMainBinding
 
     private lateinit var  mainViewModel : MainViewModel
+
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val mainAdapter by lazy { MainRecyclerAdapter(mainViewModel) }
 
@@ -34,13 +39,15 @@ class MainFragment : Fragment() {
 
         binding = FragmentMainBinding.inflate(inflater,container,false).apply { setLifecycleOwner(this@MainFragment) }
 
-        mainViewModel = ViewModelProviders.of(this,InjectorUtils.provideMainViewModelFactory(requireContext())).get(MainViewModel::class.java)
-
-        subscribeUi()
+        mainViewModel = activityViewModelProvider(viewModelFactory)
 
         return binding.root
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        subscribeUi()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         recycler?.apply {
@@ -56,6 +63,7 @@ class MainFragment : Fragment() {
                     }
                 }
             }.show(fragmentManager,null)
+
         }.let { dispose.add(it) }
     }
 
@@ -64,7 +72,8 @@ class MainFragment : Fragment() {
         dispose.clear()
     }
     private fun subscribeUi(){
-        mainViewModel.mainList.observe(viewLifecycleOwner, Observer {
+        mainViewModel.test.observe(viewLifecycleOwner, Observer {
+            Log.i("hsik","it = $it")
             binding.hasMains = (it != null && it.isNotEmpty())
             if(it != null && it.isNotEmpty()){
                 mainAdapter.submitList(it)
@@ -74,8 +83,5 @@ class MainFragment : Fragment() {
             Log.i("hsik","snackbarMessage = $it")
             Snackbar.make(coordinator?:return@Observer,it,Snackbar.LENGTH_SHORT).show()
         })
-    }
-    companion object {
-        fun newInstance() : MainFragment = MainFragment()
     }
 }
